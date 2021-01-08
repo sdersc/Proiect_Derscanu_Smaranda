@@ -1,0 +1,87 @@
+﻿@model Proiect_Derscanu_Smaranda.Models.HaberdasheryViewModels.WeaverIndexData
+
+@{
+    ViewData["Title"] = "Weavers";
+}
+<h2>Weavers</h2>
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Weaver Name</th>
+            <th>Specialty</th>
+            <th>Fabrics</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Weavers)
+        {
+            string selectedRow = "";
+            if (item.ID == (int?)ViewData["WeaverID"])
+            {
+                selectedRow = "success";
+            }
+            <tr class="@selectedRow">
+                <td>
+                    @Html.DisplayFor(modelItem => item.WeaverName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Specialty)
+                </td>
+
+                <td>
+                    @{
+                        foreach (var fabric in item.FabricWeaved)
+                        {
+                            @fabric.Fabric.ID @: @fabric.Fabric.Type <br />
+                        }
+                    }
+                </td>
+                <td>
+                    <a asp-action="Index" asp-route-id="@item.ID">Select</a> |
+                    <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@if (Model.Fabrics != null)
+{
+    <h3>Fabrics Weaved by Selected Weaver</h3>
+    <table class="table">
+        <tr>
+            <th></th>
+            <th>Type</th>
+            <th>Color</th>
+            <th>Price</th>
+        </tr>
+        @foreach (var item in Model.Fabrics)
+        {
+            string selectedRow = "";
+            if (item.ID == (int?)ViewData["FabricID"])
+            {
+                selectedRow = "success";
+            }
+            <tr class="@selectedRow">
+                <td>
+                    @Html.ActionLink("Select", "Index", new { fabricID = item.ID })
+                </td>
+                <td>
+                    @item.Type
+                </td>
+                <td>
+                    @item.Color
+                </td>
+                <td>
+                    @item.Price
+                </td>
+            </tr>
+        }
+    </table>
+    }
